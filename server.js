@@ -10,7 +10,7 @@ import itemRouter from './routes/itemRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/orderRoute.js';
 import passport from "passport";
-import session from "express-session";
+//import session from "express-session";
 import "./config/passport.js";
 import jwt from "jsonwebtoken";
 
@@ -40,14 +40,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
 
-app.use(session({
-    secret: "your_secret_key",
-    resave: false,
-    saveUninitialized: true
-}));
+
 
 app.use(passport.initialize());
-app.use(passport.session());
+
 
 //Database
 //await connectDB()
