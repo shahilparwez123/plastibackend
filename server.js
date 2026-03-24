@@ -22,7 +22,12 @@ const __dirname = path.dirname(__filename)
 //MIDDILEWARE
 app.use(cors({
     origin: (origin, callback) => {
-        const allowedOrigins = ['http://localhost:5173','http://localhost:5174','http://localhost:5175','http://localhost:5176','http://localhost:5177', 'http://localhost:5178'];
+        const allowedOrigins = ['http://localhost:5173',
+          'https://plastipro.vercel.app/',
+          'https://plastiadmin.vercel.app/',
+          ,
+       , 
+       ];
         if(!origin || allowedOrigins.includes(origin)){
             callback(null, true)
         }
@@ -35,7 +40,7 @@ app.use(cors({
     credentials: true,
 }
 
-))
+));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
