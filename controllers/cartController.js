@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import { CartItem} from '../modals/cartModal.js'
-import { path } from 'framer-motion/client';
+
 
 
 //GET ITEM
