@@ -21,26 +21,15 @@ const __dirname = path.dirname(__filename)
 
 //MIDDILEWARE
 app.use(cors({
-    origin: (origin, callback) => {
-        const allowedOrigins = ['http://localhost:5173',
-          'https://plastipro.vercel.app/',
-          'https://plastiadmin.vercel.app/',
-          ,
-       , 
-       ];
-        if(!origin || allowedOrigins.includes(origin)){
-            callback(null, true)
-        }
+  origin: [
+    "http://localhost:5173",
+    "https://plastipro.vercel.app",
+    "https://plastiadmin.vercel.app"
+  ],
+  credentials: true
+}));
 
-        else{
-            callback(new Error('Not allowed by CORS'))
 
-        }
-    },
-    credentials: true,
-}
-
-));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
@@ -51,7 +40,7 @@ app.use(passport.initialize());
 
 
 //Database
-//await connectDB()
+//await connectDB();
 
 //ROUTES
 app.use('/api/user', userRouter)

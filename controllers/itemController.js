@@ -52,12 +52,12 @@ if (isNaN(price) || price <= 0) {
 
 export const getItems = async (_req,res, next) =>{
     try{
-        const items = await itemModal.find().sort({ createAt: -1});
+        const items = await itemModal.find().sort({ createdAt: -1});
         const host = `${_req.protocol}://${_req.get('host')}`;
 
         const withFullUrl = items.map(i => ({
             ...i.toObject(),
-            imageUrl: i.imageUrl ? host + i.imageUrl : '',
+            imageUrl: i.imageUrl ? `${process.env.BASE_URL}${i.imageUrl}` : '',
         }))
         res.json(withFullUrl)
     }
