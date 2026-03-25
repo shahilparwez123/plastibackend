@@ -21,11 +21,7 @@ const __dirname = path.dirname(__filename)
 
 //MIDDILEWARE
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://plastipro.vercel.app",
-    "https://plastiadmin.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
 
