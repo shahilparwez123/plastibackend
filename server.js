@@ -40,7 +40,7 @@ app.use(passport.initialize());
 
 //ROUTES
 app.use('/api/user', userRouter)
-app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
+//app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 app.use('/api/items', itemRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/orders', orderRouter)

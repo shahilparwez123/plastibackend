@@ -8,7 +8,7 @@ export const createItem = async (req,res,next) => {
         const price = Number(req.body.price);
         const rating = Number(req.body.rating);
         const hearts = Number(req.body.hearts);
-        const imageUrl = req.file ? `/uploads/${req.file.filename}` : ''; 
+        const imageUrl = req.file ? req.file.path : ''; 
 
         console.log("BODY:", req.body);
         console.log("FILE:", req.file);
@@ -58,8 +58,7 @@ export const getItems = async (_req,res, next) =>{
         const withFullUrl = items.map(i => ({
     ...i.toObject(),
     imageUrl: i.imageUrl 
-        ? `${_req.protocol}://${_req.get('host')}${i.imageUrl}` 
-        : ''
+       
 }));
         res.json(withFullUrl)
     }
