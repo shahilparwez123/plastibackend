@@ -58,7 +58,7 @@ export const getItems = async (_req,res, next) =>{
         const withFullUrl = items.map(i => ({
     ...i.toObject(),
     imageUrl: i.imageUrl 
-        ? `${process.env.BASE_URL}${i.imageUrl}` 
+        ? `${_req.protocol}://${_req.get('host')}${i.imageUrl}` 
         : ''
 }));
         res.json(withFullUrl)
