@@ -78,8 +78,15 @@ export const createOrder = async (req,res) => {
             });
 
             await newOrder.save();
-    
-            return res.status(201).json({ order: newOrder, checkoutUrl: session.url})
+
+// ✅ SEND RESPONSE FIRST (INSTANT)
+            res.status(201).json({ order: newOrder, checkoutUrl: null });
+
+// ✅ SEND EMAIL IN BACKGROUND (NO DELAY)
+            sendEmail(newOrder).catch(err => console.error("Email error:", err));
+
+
+
         }
 
         //IF payment is done cod
@@ -93,7 +100,6 @@ export const createOrder = async (req,res) => {
         });
 
         await newOrder.save();
-        await sendEmail(newOrder);
         return res.status(201).json({ order: newOrder, checkoutUrl:null })
 
     
