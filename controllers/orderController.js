@@ -79,12 +79,13 @@ export const createOrder = async (req,res) => {
 
             await newOrder.save();
 
-// ✅ SEND RESPONSE FIRST (INSTANT)
-            res.status(201).json({ order: newOrder, checkoutUrl: null });
+res.status(201).json({ order: newOrder, checkoutUrl: session.url });
 
-// ✅ SEND EMAIL IN BACKGROUND (NO DELAY)
-            sendEmail(newOrder).catch(err => console.error("Email error:", err));
-
+setTimeout(() => {
+  sendEmail(newOrder)
+    .then(() => console.log("✅ Email sent"))
+    .catch(err => console.error("❌ Email error:", err));
+}, 1000);
 
 
         }
@@ -100,7 +101,16 @@ export const createOrder = async (req,res) => {
         });
 
         await newOrder.save();
-        return res.status(201).json({ order: newOrder, checkoutUrl:null })
+
+// ✅ STEP 1: SEND RESPONSE FAST
+res.status(201).json({ order: newOrder, checkoutUrl: null });
+
+// ✅ STEP 2: SEND EMAIL AFTER RESPONSE (WITH DELAY)
+setTimeout(() => {
+  sendEmail(newOrder)
+    .then(() => console.log("✅ Email sent"))
+    .catch(err => console.error("❌ Email error:", err));
+}, 1000);
 
     
     }
