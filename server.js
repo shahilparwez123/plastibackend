@@ -24,17 +24,19 @@ const __dirname = path.dirname(__filename)
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://plastipro.vercel.app"
+  "https://plastipro.vercel.app",
+  "https://plastiadmin.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman
+    if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+      callback(null, true);
     } else {
-      return callback(new Error("Not allowed by CORS"));
+      console.log("❌ Blocked by CORS:", origin); // DEBUG
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
