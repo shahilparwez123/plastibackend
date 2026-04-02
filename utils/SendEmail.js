@@ -8,36 +8,31 @@ const sendEmail = async (order) => {
 
     const itemsList = order.items.map(
       (i, index) =>
-        `<li>${i.item.name} - ₹${i.item.price} x ${i.quantity}</li>`
+        `<p>${index + 1}. ${i.item.name} - ₹${i.item.price} x ${i.quantity}</p>`
     ).join("");
 
     await resend.emails.send({
-      from: "onboarding@resend.dev", // works without domain setup
-      to: [process.env.EMAIL_USER, order.email], // ✅ admin + customer
-      subject: "🛒 Order Confirmation",
+      from: "onboarding@resend.dev",
+      to: [process.env.EMAIL_USER], // ✅ only you
+      subject: "🛒 New Order Received",
       html: `
-        <h2>🎉 Order Confirmed!</h2>
+        <h2>🛒 NEW ORDER RECEIVED</h2>
 
-        <p>Hi ${order.firstName},</p>
+        <p>👤 <b>Customer:</b> ${order.firstName} ${order.lastName}</p>
+        <p>📧 <b>Email:</b> ${order.email}</p>
+        <p>📱 <b>Phone:</b> ${order.phone}</p>
 
-        <p>Your order has been successfully placed.</p>
-
-        <h3>📦 Order Details:</h3>
-        <ul>
-          <li><b>Name:</b> ${order.firstName} ${order.lastName}</li>
-          <li><b>Email:</b> ${order.email}</li>
-          <li><b>Phone:</b> ${order.phone}</li>
-          <li><b>Total:</b> ₹${order.total}</li>
-          <li><b>Payment:</b> ${order.paymentMethod}</li>
-        </ul>
-
-        <h3>🛍 Items:</h3>
-        <ul>${itemsList}</ul>
-
-        <p>📍 Address:<br/>
+        <p>📍 <b>Address:</b><br/>
         ${order.address}, ${order.city}, ${order.zipCode}</p>
 
-        <p>Thank you for shopping with us ❤️</p>
+        <p>💳 <b>Payment:</b> ${order.paymentMethod}</p>
+        <p>💰 <b>Total:</b> ₹${order.total}</p>
+
+        <h3>📦 ITEMS:</h3>
+        ${itemsList}
+
+        <br/>
+        <p>--------------------------</p>
       `,
     });
 
