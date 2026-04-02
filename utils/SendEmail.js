@@ -1,52 +1,50 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async (order) => {
   try {
-    console.log("EMAIL:", process.env.EMAIL_USER);
-    console.log("PASS:", process.env.EMAIL_PASS);
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    console.log("📧 Sending email via Resend...");
 
-    // 🧾 FORMAT ITEMS
     const itemsList = order.items.map(
       (i, index) =>
-        `${index + 1}. ${i.item.name} - ₹${i.item.price} x ${i.quantity}`
-    ).join("\n");
+        `<li>${i.item.name} - ₹${i.item.price} x ${i.quantity}</li>`
+    ).join("");
 
-    const message = `
-🛒 NEW ORDER RECEIVED
+    await resend.emails.send({
+      from: "onboarding@resend.dev", // works without domain setup
+      to: [process.env.EMAIL_USER, order.email], // ✅ admin + customer
+      subject: "🛒 Order Confirmation",
+      html: `
+        <h2>🎉 Order Confirmed!</h2>
 
-👤 Customer: ${order.firstName} ${order.lastName}
-📧 Email: ${order.email}
-📱 Phone: ${order.phone}
+        <p>Hi ${order.firstName},</p>
 
-📍 Address:
-${order.address}, ${order.city}, ${order.zipCode}
+        <p>Your order has been successfully placed.</p>
 
-💳 Payment: ${order.paymentMethod}
-💰 Total: ₹${order.total}
+        <h3>📦 Order Details:</h3>
+        <ul>
+          <li><b>Name:</b> ${order.firstName} ${order.lastName}</li>
+          <li><b>Email:</b> ${order.email}</li>
+          <li><b>Phone:</b> ${order.phone}</li>
+          <li><b>Total:</b> ₹${order.total}</li>
+          <li><b>Payment:</b> ${order.paymentMethod}</li>
+        </ul>
 
-📦 ITEMS:
-${itemsList}
+        <h3>🛍 Items:</h3>
+        <ul>${itemsList}</ul>
 
---------------------------
-`;
+        <p>📍 Address:<br/>
+        ${order.address}, ${order.city}, ${order.zipCode}</p>
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // send to yourself
-      subject: "🛒 New Order Received",
-      text: message,
+        <p>Thank you for shopping with us ❤️</p>
+      `,
     });
 
-    console.log("✅ Email Sent");
+    console.log("✅ Email sent successfully");
+
   } catch (error) {
-    console.log("❌ Email Error:", error);
+    console.error("❌ Email error:", error.message);
   }
 };
 

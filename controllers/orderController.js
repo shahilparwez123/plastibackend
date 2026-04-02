@@ -86,7 +86,7 @@ setTimeout(() => {
     .then(() => console.log("✅ Email sent"))
     .catch(err => console.error("❌ Email error:", err));
 }, 1000);
-
+return;
 
         }
 
@@ -100,17 +100,18 @@ setTimeout(() => {
             paymentStatus: 'succeeded'
         });
 
+       
         await newOrder.save();
 
-// ✅ STEP 1: SEND RESPONSE FAST
-res.status(201).json({ order: newOrder, checkoutUrl: null });
+// ✅ SEND RESPONSE FAST
+res.status(201).json({ order: newOrder });
 
-// ✅ STEP 2: SEND EMAIL AFTER RESPONSE (WITH DELAY)
+// ✅ SEND EMAIL IN BACKGROUND
 setTimeout(() => {
   sendEmail(newOrder)
     .then(() => console.log("✅ Email sent"))
     .catch(err => console.error("❌ Email error:", err));
-}, 1000);
+}, 500);
 
     
     }
@@ -146,7 +147,11 @@ setTimeout(() => {
                     );
 
                     if(!order) return res.status(404).json({ message: 'Order not found '})
-                        await sendEmail(order);
+                        setTimeout(() => {
+                        sendEmail(order)
+                         .then(() => console.log("✅ Email sent"))
+                         .catch(err => console.error("❌ Email error:", err));
+                        }, 500);
                         return res.json(order)
                 }
 
